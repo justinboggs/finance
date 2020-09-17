@@ -1,0 +1,63 @@
+import numpy as np  
+import pandas as pd  
+import matplotlib.pyplot as plt  
+from scipy.stats import norm
+import xlrd
+import style 
+
+#import data
+data = pd.read_excel('10YR.xls')
+df = pd.DataFrame(data, columns=['Date', 'Ten_Yr'])
+df = df.set_index('Date')
+
+#log returns
+log_returns = np.log(1 + df.pct_change())
+#plt.plot(log_returns)
+#plt.plot(df)
+#plt.show()
+
+#GBM
+u = log_returns.mean()
+var = log_returns.var()
+drift = u - (0.5 * var)
+stdev = log_returns.std()
+
+type(drift)
+type(stdev)
+
+np.array(drift)
+drift.values
+stdev.values
+norm.ppf(0.95)
+
+x = np.random.rand(10,2)
+norm.ppf(x)
+
+z = norm.ppf(np.random.rand(10,2))
+
+#set parameters 
+t_intervals = 500
+iterations = 50
+
+daily_yield = np.exp(drift.values + stdev.values * norm.ppf(np.random.rand(t_intervals, iterations)))
+
+S0 = df.iloc[-1]
+
+yield_list = np.zeros_like(daily_yield)
+yield_list[0]
+yield_list[0] = S0
+
+for t in range(1, t_intervals):
+    yield_list[t] = yield_list[t-1] * daily_yield[t]
+    #print(yield_list)
+
+plt.style.use("seaborn-whitegrid")
+plt.plot(yield_list)
+plt.title("Monte Carlo Simulation - 10yr Treasury")
+plt.xlabel("N Days")
+plt.ylabel("Yield")
+plt.show()
+
+#averages
+print(np.median(yield_list))
+print(yield_list.mean())
