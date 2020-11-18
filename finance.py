@@ -37,14 +37,3 @@ graphPath = 'data/stocks'
 graphName = input('Save graph as: ') + '.png'
 graphFileName = os.path.join(graphPath, graphName)
 plt.savefig(graphFileName)
-
-# graph = sns.lineplot(data=df, x="Date", y="Close")
-# plt.xticks(rotation=45)
-# plt.title(stock_name)
-# plt.tight_layout()
-
-# graphPath = 'data/stocks'
-# graphName = input('Enter graph name: ') + '.png'
-# graphFileName = os.path.join(graphPath, graphName)
-
-# graph.figure.savefig(graphFileName)
